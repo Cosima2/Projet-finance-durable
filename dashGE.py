@@ -97,8 +97,8 @@ if choix == "Obligations (gouvernementales ou vertes)":
 
 
     # ----------- PAYS INCLUS / EXCLUS
-    #CODE A METTRE 
     st.subheader("Résultat de la sélection ESG")
+    st.markdown ("Choix des fichiers ayant les meilleures résultats sur les critères ESG et les rendements obligataires.")
 
     pays_inclus = ["Greece", "Costa Rica", "Sweden", "Norway", "Finland", "Denmark", "Iceland", "Latvia", "Luxembourg", "Colombia", "France", "Germany", "United Kingdom", "Canada"]
     pays_exclus = ["Hungary", "Australia", "United States", "Czech Republic", "New Zealand", "Israel", "Netherlands", "Japan", "Mexico", "Poland"]
@@ -244,12 +244,13 @@ elif choix== "Fonds à impact":
 
     # ----------- Fonds INCLUS / EXCLUS
     st.markdown("Bien que possédant des labels ESG, il nous paraissait peu cohérent de sélectionner des fonds émis par des entreprises" \
-    "comme Blackrock, Vanguard ou Amundi qui sont des entreprises qui investissent massivement dans des actifs peu respectueux de l'environnement." \
+    "comme Blackrock ou Vanguard qui sont des entreprises qui investissent massivement dans des actifs peu respectueux de l'environnement." \
     "Nous avons donc décidé de ne pas sélectionner ces fonds et il paraissait inévitable de chercher manuellement les fonds en épluchant les sites de certaines" \
-    "sociétés prometteuses")
+    "sociétés prometteuses. Des fonds d'Amundi ou BNP Paribas que nous comptions de base exclure ont été gardés car les sociétés qu'ils contiennent nous " \
+    "paraissent prometteuses et respectueuses de l'environnement. ")
 
     fonds_inclus = ["Mirova", "Ecofi", "La Banque Postale", "Amiral Gestion", "Sycomore"]
-    fonds_exclus = ["Blackrock", "Vanguard", "Amundi", "Lyxor", "HSBC", "BNP Paribas", "Natixis", "Société Générale"]
+    fonds_exclus = ["Blackrock", "Vanguard","Lyxor", "HSBC", "Natixis", "Société Générale"]
     col1, col2 = st.columns(2)
     with col1:
         st.success("Fonds retenus")
@@ -265,7 +266,7 @@ elif choix== "Fonds à impact":
             Il investit dans des sociétés qui développent des solutions durables dans les domaines de l'énergie, de l'eau, des déchets et de l'agriculture."""
         },
         "Mirova Europe Environnement" : {
-            "ticker": "FR0010521575",
+            "ticker": "0P0000G6X1.F",
             "description": """Le fonds Mirova Europe Environnement a pour objectif de soutenir des entreprises européennes qui s'engagent dans des solutions et services ayant un impact positif sur l'environnement. 
             Ce fonds s’inscrit dans une démarche d’investissement durable et vise à allouer le capital vers des modèles économiques favorisant les enjeux environnementaux, tout en cherchant à générer des rendements à long terme. 
             Il met l’accent sur des secteurs comme la gestion durable des ressources, l'économie circulaire, les énergies renouvelables et l’efficacité énergétique.
@@ -292,9 +293,9 @@ elif choix== "Fonds à impact":
             <td style="padding: 10px; vertical-align: top;"><b>Labels et certifications</b></td>
             <td style="padding: 10px;">
             - B-Corp<br>
-            - Entreprise à mission<br>
             - Greenfin<br>
             - Article 9 (SFDR)
+            - ISR
             </td>
         </tr>
 
@@ -340,16 +341,15 @@ elif choix== "Fonds à impact":
         st.info(description)
 
     elif choix=="Mirova Europe Environnement" :
-        # Récupération des données financières depuis Yahoo Finance
-        yf_data = yf.download(symbole, start="2020-01-01", end="2024-12-31")
-
-        # Extraction de la date et du cours ajusté
-        df_plot = yf_data[["Adj Close"]].reset_index()
+        # Récupération des données financières
+        csv_file = "financial_data/data_actifs.csv"
+        df = pd.read_csv(csv_file, parse_dates=[0], index_col=0)
+        df_plot = df[[symbole]].dropna().reset_index()
         df_plot.columns = ["Date", "Prix"]
 
-        # Affichage du graphique
-        st.subheader(f"Cours de {choix}")
-        fig = px.line(df_plot, x="Date", y="Prix", title=f"{choix} - Cours du fonds")
+            # Affichage du cours du fonds
+        st.subheader(f"Cours du fonds {choix}")
+        fig = px.line(df_plot, x="Date", y="Prix", title=f"{choix} - Cours")
         st.plotly_chart(fig)
 
         # Section labels et stratégie
@@ -424,6 +424,31 @@ elif choix== "Fonds à impact":
         """, unsafe_allow_html=True)
 
 
+        st.title("Labels d'investissement responsable")
+
+        # Dictionnaire des labels avec descriptions
+        labels = {
+            "Greenfin": "Label français garantissant la contribution des fonds à la transition énergétique et écologique.",
+            "ISR": "Label Investissement Socialement Responsable pour les fonds intégrant des critères ESG dans leur gestion.",
+            "Article 9 (SFDR)": "Catégorie de la réglementation SFDR pour les fonds qui ont un objectif d’investissement durable clair.",
+            "B-Corp": "Certification pour les entreprises conciliant but lucratif et impact sociétal et environnemental positif."
+        }
+
+        # Initialisation des états de clic
+        for label in labels:
+            if f"show_{label}" not in st.session_state:
+                st.session_state[f"show_{label}"] = False
+
+        # Affichage des boutons et description dynamique
+        for label, description in labels.items():
+            if st.button(label):
+                st.session_state[f"show_{label}"] = not st.session_state[f"show_{label}"]
+
+            if st.session_state[f"show_{label}"]:
+                st.markdown(f"**{label}** : {description}")
+
+
+
         # Affichage de la description ESG
         st.markdown("#### Pourquoi ce fonds ?")
         st.info(description)
@@ -437,7 +462,7 @@ elif choix== "Fonds à impact":
 # Startup verte
 # -------------------------------
 
-elif choix== "Startup verte":
+#elif choix== "Startup verte":
 
 #elif choix== "ETFs":
 
@@ -445,6 +470,6 @@ elif choix== "Startup verte":
 # -------------------------------
 # INFOS FOOTER
 # -------------------------------
-st.sidebar.info("Ce dashboard présente les performances financières et les notations ESG des entreprises spécialisées dans le secteur de l'eau.")
-st.markdown("---")
-st.caption("© 2025 - Dashboard ESG | Streamlit prototype | Données fictives ou publiques.")
+    st.sidebar.info("Ce dashboard présente les performances financières et les notations ESG des entreprises spécialisées dans le secteur de l'eau.")
+    st.markdown("---")
+    st.caption("© 2025 - Dashboard ESG | Streamlit prototype | Données fictives ou publiques.")
