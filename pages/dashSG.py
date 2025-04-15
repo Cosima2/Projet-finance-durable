@@ -1969,7 +1969,7 @@ elif choix == "Actions Durables Inclusion":
 
 
         st.markdown("### Caractéristiques générales de l'actif")
-
+        
         st.markdown("""
         <table style="width:100%; border-collapse: collapse;">
         <tr style="background-color:#f2f2f2;">
