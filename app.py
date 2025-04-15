@@ -1,3 +1,4 @@
+pip i
 import streamlit as st
 
 st.set_page_config(
@@ -22,9 +23,9 @@ cols = st.columns(5)
 pages = [
     ("Accueil", "Accueil"),
     ("Générale", "dashGE"),
-    ("Écologique", "dashEG"),
+    ("Écologique", "dashES"),
     ("Social", "dashSG"),
-    ("Europe", "dashES")
+    ("Europe", "dashEG")
 ]
 
 for i, (name, page) in enumerate(pages):
