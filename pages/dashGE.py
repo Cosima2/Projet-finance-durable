@@ -1771,9 +1771,9 @@ st.subheader("Choisissez votre thématique d'investissement")
 
 # Options de navigation sans la page générale
 options_pages = {
-    "Investissement Écologique": "dashEG",  # Correspond à pages/dashEG.py
+    "Investissement Écologique": "dashES",  # Correspond à pages/dashEG.py
     "Investissement Social": "dashSG",      # Correspond à pages/dashSG.py
-    "Investissement en Europe": "dashES"    # Correspond à pages/dashES.py
+    "Investissement en Europe": "dashEG"    # Correspond à pages/dashES.py
 }
 
 # Création des colonnes pour organiser les boutons
