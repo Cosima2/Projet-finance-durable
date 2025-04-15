@@ -1965,7 +1965,7 @@ elif choix == "Actions Durables Inclusion":
         image_path = "APM_12avr25.png"
 
         # Affichage de l'image
-        st.image(image_path, caption="Cours de l'action APM Group le 12 avril 2025", use_column_width=True)
+        st.image(image_path, caption="Cours de l'action APM Group le 12 avril 2025", use_container_width=True)
 
 
         st.markdown("### Caractéristiques générales de l'actif")
